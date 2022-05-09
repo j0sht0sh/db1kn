@@ -10,6 +10,7 @@ ATTEMPTED=$(echo $TOTAL | cut -d' ' -f 1)
 SENT=$(echo $TOTAL | cut -d' ' -f 2)
 RECEIVED=$(echo $TOTAL | cut -d' ' -f 3)
 REACHED=$(echo $SENT / $ATTEMPTED)
+REACHED=$(echo $SENT/$ATTEMPTED)
 DATA=$(echo $TOTAL | cut -d' ' -f 4,5)
 TARGETS=$(curl -s $CONFIG_URL | jq '.jobs[].args | select(.request != null) | .request.path' | sed 's/"http.*\/\///' | sed 's/\"//' | sed 's/\/.*//g' | sort | uniq)
 
