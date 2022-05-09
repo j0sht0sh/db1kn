@@ -9,6 +9,7 @@ VPN_CONFIG=$(ls /root/db1000n/openvpn/ | grep 'modified' | sed 's/.modified//g')
 ATTEMPTED=$(echo $TOTAL | cut -d' ' -f 1)
 SENT=$(echo $TOTAL | cut -d' ' -f 2)
 RECEIVED=$(echo $TOTAL | cut -d' ' -f 3)
+REACHED=$(echo SENT*100/ATTEMPTED)
 DATA=$(echo $TOTAL | cut -d' ' -f 4,5)
 TARGETS=$(curl -s $CONFIG_URL | jq '.jobs[].args | select(.request != null) | .request.path' | sed 's/"http.*\/\///' | sed 's/\"//' | sed 's/\/.*//g' | sort | uniq)
 
@@ -18,15 +19,14 @@ message+="*Requests attempted*: \`$ATTEMPTED\`"
 message+="%0A"
 message+="*Requests sent*: \`$SENT\`"
 message+="%0A"
+message+="*Requests reached rate*: \`$REACHED\`"
+message+="%0A"
 message+="*Responses received*: \`$RECEIVED\`"
 message+="%0A"
 message+="*Data sent*: \`$DATA\`"
 message+="%0A"
 message+="*VPN config*: \`$VPN_CONFIG\`"
 message+="%0A"
-message+="*Targets*:"
-message+="%0A"
-message+=$TARGETS
 
 curl -s --data "text=${message}" \
         --data "chat_id=$TG_CHAT_ID" \
